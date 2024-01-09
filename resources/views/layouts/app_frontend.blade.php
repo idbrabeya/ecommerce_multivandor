@@ -283,6 +283,8 @@
     <!-- OffCanvas Menu End -->
 
  @yield('content')
+ 
+
 
     <!-- Footer Area Start -->
     <div class="footer-area m-lrb-30px">
@@ -633,6 +635,7 @@
 
     <!-- Main Js -->
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
+    @yield('script')
 </body>
 
 

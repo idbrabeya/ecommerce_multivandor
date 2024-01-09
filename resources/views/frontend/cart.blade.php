@@ -109,7 +109,7 @@
                     </div>
 
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-lm-30px">
+                    {{-- <div class="col-lg-4 col-md-6 mb-lm-30px">
                         <div class="cart-tax">
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax</h4>
@@ -151,42 +151,61 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-lm-30px">
+                    </div> --}}
+                    <div class="col-lg-6 col-md-6 mb-lm-30px">
                         <div class="discount-code-wrapper">
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
                             </div>
                             <div class="discount-code">
                                 <p>Enter your coupon code if you have one.</p>
-                                <form>
-                                    <input type="text" required="" name="name" />
+                                <form method="" action="">
+                                    <input type="text" name="coupon_name" value="{{($coupon_name)?$coupon_name:""}}" />
                                     <button class="cart-btn-2" type="submit">Apply Coupon</button>
                                 </form>
+                                @if (session('coupon_erro'))
+                                <div class="alert alert-danger mt-2">
+                                    {{session('coupon_erro')}}
+                                </div>
+                                @endif
+                                
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-12 mt-md-30px">
+                    <div class="col-lg-6 col-md-12 mt-md-30px">
                         <div class="grand-totall">
                             <div class="title-wrap">
+                               @php
+                                  Session::put('$_cart_total',$cart_total);
+                               @endphp
                                 <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                             </div>
-                            <h5> Cart Total Amount <span>${{   $cart_total }}</span></h5>
+                            <h5> Cart Total<span>${{$cart_total }}</span></h5>
+                            <h5> Discount Total (
+                                @if ($coupon_name)
+                                {{$coupon_name}}
+                                @else
+                                N\A
+                                @endif
+                                ) <span>$ {{$discount_total}}</span></h5>
+                            <h5> Sub Total (Approx) <span id="sub_total">{{$cart_total-$discount_total}}</span><span>$</span></h5>
                             <div class="total-shipping">
                                 <h5>Total shipping</h5>
                                 <ul>
-                                    <li><input type="checkbox" /> Standard <span>$20.00</span></li>
-                                    <li><input type="checkbox" /> Express <span>$30.00</span></li>
+                                    <li><input id="sipping_btn_1" type="radio" name="shipping"/> Standard <span>$20.00</span></li>
+                                    <li><input id="sipping_btn_2"  type="radio" name="shipping"/> Express <span>$30.00</span></li>
+                                    <li><input id="sipping_btn_3"  type="radio" name="shipping"/> Free Shipping <span>$00.00</span></li>
+
                                 </ul>
                             </div>
-                            <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
+                            <h4 class="grand-totall-title">Grand Total<span id="grand_total">{{$cart_total-$discount_total}}</span><span>$</span></h4>
 
                             @if ( $flag)
                             <div class="alert alert-danger">
                                 Please remove stock out product first
-                              </div>
+                            </div>
                             @else
-                            <a href="checkout.html">Proceed to Checkout</a>
+                            <a id="checkout-btn" class="d-none" href="">Proceed to Checkout</a>
                             @endif
 
                         </div>
@@ -197,4 +216,18 @@
     </div>
 </div>
 <!-- Cart Area End -->
+@endsection
+@section('script')
+<script>
+    $('#sipping_btn_1').click(function() {
+       $('#grand_total').html((parseInt($('#sub_total').html())+20));
+       
+    });
+    $('#sipping_btn_2').click(function() {
+      $('#grand_total').html((parseInt($('#sub_total').html())+30));
+   });
+   $('#sipping_btn_3').click(function() {
+      $('#grand_total').html((parseInt($('#sub_total').html())+0));
+   });
+</script>
 @endsection
