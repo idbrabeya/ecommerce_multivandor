@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Cart;
+use App\Models\Coupon;
 use App\Models\Wishlist;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -54,7 +55,40 @@ class CartController extends Controller
     return back();
  }
  public function cart(){
-     return view ('frontend.cart');
+    if(isset($_GET['coupon_name'])) {
+        if($_GET['coupon_name']){
+        $coupon_name = $_GET['coupon_name'];
+        if(Coupon::where('coupon_name',$coupon_name)->exists()){
+            $coupon_info = Coupon::where('coupon_name',$coupon_name)->first();
+             if($coupon_info->limit!=0){
+               
+               if($coupon_info->validity < Carbon::today()->format('Y-m-d')){
+                   $discount_total= 180;
+                   return redirect('cart')->with('coupon_erro', $coupon_name .' coupon date is over!!');
+               }else{
+                    
+                   $discount_total= (session('$_cart_total')*$coupon_info->discount_percentage)/100;
+               }
+           
+                }else{
+                $discount_total=0;
+                return redirect('cart')->with('coupon_erro', $coupon_name .' limit is over!!');
+              }
+           
+            }else{
+            $discount_total=0;
+            return redirect('cart')->with('coupon_erro', $coupon_name .' coupon is not in our records');
+           }
+           }else{
+           
+            $coupon_name = "";
+            $discount_total=0;
+          }  
+        }else{
+        $coupon_name = "";
+        $discount_total=0;
+       }
+     return view ('frontend.cart',compact('discount_total','coupon_name'));
  }
 
  public function clear_shop_cart($user_id){
