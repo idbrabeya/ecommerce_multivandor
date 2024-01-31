@@ -205,7 +205,7 @@
                                 Please remove stock out product first
                             </div>
                             @else
-                            <a id="checkout-btn" class="d-none" href="">Proceed to Checkout</a>
+                            <a id="checkout_btn" class="d-none" href="{{route('checkout.index')}}">Proceed to Checkout</a>
                             @endif
 
                         </div>
@@ -221,13 +221,15 @@
 <script>
     $('#sipping_btn_1').click(function() {
        $('#grand_total').html((parseInt($('#sub_total').html())+20));
-       
+       $('#checkout_btn').removeClass('d-none');
     });
     $('#sipping_btn_2').click(function() {
       $('#grand_total').html((parseInt($('#sub_total').html())+30));
+      $('#checkout_btn').removeClass('d-none');
    });
    $('#sipping_btn_3').click(function() {
       $('#grand_total').html((parseInt($('#sub_total').html())+0));
+      $('#checkout_btn').removeClass('d-none');
    });
 </script>
 @endsection

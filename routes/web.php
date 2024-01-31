@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -55,3 +56,6 @@ Route::get('/cart',[CartController::class,'cart'])->name('cart');
 Route::get('/clear/shop/cart/{user_id}',[CartController::class,'clear_shop_cart'])->name('clear.shop.cart');
 Route::get('/cart/remove/{cart_id}',[CartController::class,'cart_remove'])->name('cart.remove');
 Route::POST('/cart/update',[CartController::class,'cart_update'])->name('cart.update');
+ 
+//checkout
+Route::get('/checkout/index',[CheckoutController::class,'checkout_index'])->name('checkout.index');
